@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import Card from "../../components/UI/Card/Index";
 
@@ -66,7 +67,7 @@ const Login = () => {
                             to="register"
                             class="text-[#730C07] hover:text-[#c0372f] font-bold"
                         >
-                            Register
+                            <Link to="/register">Register</Link>
                         </button>
                     </span>
                 </div>
