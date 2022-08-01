@@ -1,10 +1,61 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import AuthContext from "../../context/auth-context";
 
 import Card from "../../components/UI/Card/Index";
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const emailInputRef = useRef();
+    const passwordInputRef = useRef();
+
+    const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        const enteredEmail = emailInputRef.current.value;
+        const enteredPassword = passwordInputRef.current.value;
+
+        const base_url = process.env.REACT_APP_API_HOST;
+        const url = `${base_url}/auth/login`;
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                email: enteredEmail,
+                password: enteredPassword
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                return res.json().then((data) => {
+                    let errorMessage = 'Authentication failed!';
+                    throw new Error(errorMessage);
+                });
+            }
+        }).then((data) => {
+            if (data.status === 'OK') {
+                authCtx.login(data.result.access_token);
+                toast.success(
+                    `Login ${data.status}`
+                );
+                navigate('/dashboard');
+            } else {
+                toast.error(`${data.error.msg}`);
+            }
+        }).catch((err) => {
+            alert(err.message);
+            toast.error('Login Failed');
+        })
+    }
 
     const handleShowPassword = (event) => {
         event.preventDefault();
@@ -15,17 +66,17 @@ const Login = () => {
             <div className="flex flex-col h-full justify-center items-center">
                 <h1 className="text-3xl font-semibold my-6">Login</h1>
                 <Card className={"w-[35%]"}>
-                    <form className="mt-4">
+                    <form onSubmit={submitHandler} className="mt-4">
                         <div className="mx-auto max-w-lg">
                             <div className="py-2">
-                                <input
+                                <input ref={emailInputRef}
                                     placeholder="Email"
                                     type="email"
                                     className="text-base text-[#868686] block px-3 py-2 rounded-lg         w-full bg-white border-2 border-gray-300 placeholder-[#868686]     shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" />
                             </div>
                             <div className="py-2">
                                 <div className="relative">
-                                    <input
+                                    <input ref={passwordInputRef}
                                         placeholder="Password"
                                         className="text-base text-[#868686] block px-3 py-2           rounded-lg w-full bg-white  border-2 border-gray-300 placeholder-[#868686] shadow-md focus:placeholder-gray-500 focus:bg-white    focus:border-gray-600 focus:outline-none"
                                         type={!showPassword ? 'password' : 'text'} />
@@ -60,12 +111,12 @@ const Login = () => {
                     </form>
 
                 </Card>
-                <div class="flex justify-center my-6">
-                    <span class="text-base text-[#868686]"
+                <div className="flex justify-center my-6">
+                    <span className="text-base text-[#868686]"
                     >Don't have an account? &nbsp;
                         <button
                             to="register"
-                            class="text-[#730C07] hover:text-[#c0372f] font-bold"
+                            className="text-[#730C07] hover:text-[#c0372f] font-bold"
                         >
                             <Link to="/register">Register</Link>
                         </button>
