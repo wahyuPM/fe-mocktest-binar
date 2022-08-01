@@ -56,11 +56,11 @@ const Register = () => {
                         </div >
                     </form>
                 </Card>
-                <div class="flex justify-center my-6">
-                    <span class="text-base text-[#868686]"
+                <div className="flex justify-center my-6">
+                    <span className="text-base text-[#868686]"
                     >Already have an account? &nbsp;
                         <button
-                            class="text-[#730C07] hover:text-[#c0372f] font-bold"
+                            className="text-[#730C07] hover:text-[#c0372f] font-bold"
                         >
                             <Link to="/">Login</Link>
                         </button>

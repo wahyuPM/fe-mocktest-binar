@@ -39,15 +39,17 @@ const Dashboard = () => {
     }, [authCtx.isLoggedIn])
 
     return (
-        <div className="container mx-auto mt-[10rem] h-full">
-            <div className="grid grid-cols-6 grid-flow-dense gap-4 overflow-auto my-8 p-2">
-                {data.map((item, index) => {
-                    return (
-                        <div key={index} className="col-span-2">
-                            <Product data={item} />
-                        </div>
-                    )
-                })}
+        <div className="container mx-auto h-full overflow-auto scroll mb-5">
+            <div className="pb-8 mx-2">
+                <div className="grid grid-cols-6 grid-flow-dense gap-4 h-max ">
+                    {data.map((item, index) => {
+                        return (
+                            <div key={index} className="col-span-2">
+                                <Product data={item} />
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )

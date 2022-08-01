@@ -27,6 +27,7 @@ function App() {
       {authCtx.isLoggedIn && (
         <BrowserRouter>
           <Header />
+          <div className="p-[80px] mb-2"></div>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
